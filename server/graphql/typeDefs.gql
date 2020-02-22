@@ -1,0 +1,38 @@
+type Query {
+	getCurrentUser: User
+}
+
+type Mutation {
+	signupUser(username: String, email: String, password: String): Token
+	signinUser(username: String, password: String): Token
+}
+
+type Token {
+	token: String!
+}
+
+type User {
+	_id: ID
+	username: String!
+	email: String!
+	password: String
+	createdDate: String
+	avatar: String!
+	likedImage: [Post]
+}
+
+type Post {
+	_id: ID
+	caption: String!
+	imageUrl: String!
+	createdDate: String!
+	createdBy: User!
+	likes: [String]
+	comments: [Comment]
+}
+
+type Comment {
+	createdBy: User!
+	commentBody: String!
+	commentDate: String!
+}
