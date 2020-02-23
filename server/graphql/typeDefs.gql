@@ -1,10 +1,15 @@
 type Query {
 	getCurrentUser: User
+
+	getPosts: [Post]
+	getMyPosts(user_id: String!): [Post]
 }
 
 type Mutation {
-	signupUser(username: String, email: String, password: String): Token
-	signinUser(username: String, password: String): Token
+	signupUser(username: String!, email: String, password: String!): Token
+	signinUser(username: String!, password: String!): Token
+
+	createPost(caption: String!, imageUrl: String!, createdBy: ID!): Post
 }
 
 type Token {

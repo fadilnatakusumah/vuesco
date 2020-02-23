@@ -3,16 +3,13 @@ import mongoose from 'mongoose'
 const Post = new mongoose.Schema({
   caption: {
     type: String,
-    required: true,
-    unique: true,
+    required: true, unique: false,
   },
   imageUrl: {
-    type: String,
+    type: String, unique: false,
     required: true,
-    unique: true,
   },
   createdDate: {
-    required: true,
     type: Date,
     default: Date.now
   },
@@ -23,7 +20,6 @@ const Post = new mongoose.Schema({
   },
   likes: {
     type: [String],
-    default: 0,
   },
   comments: [{
     createdBy: {
