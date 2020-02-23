@@ -1,7 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import store from '../store'
+
 Vue.use(VueRouter)
+
+const AuthGuard = (to, from, next) => {
+  if (!store.getters.currentUser) {
+    return next({
+      path: '/'
+    });
+  }
+  next();
+}
 
 const routes = [
   {
@@ -19,6 +30,12 @@ const routes = [
     name: 'Signup',
     component: () => import('../pages/PageAuth'),
   },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../pages/PageProfile'),
+    beforeEnter: AuthGuard
+  },
   // {
   // path: '/about',
   // name: 'About',
@@ -30,6 +47,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 

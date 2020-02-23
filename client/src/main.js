@@ -19,14 +19,16 @@ export const defaultClient = new ApolloClient({
   fetchOptions: {
     credentials: "include"
   },
-  onError: (onError) => console.log("TCL: error message: ", onError.graphQLErrors[0].message),
-  request: operation => {
+  onError: (onError) => console.log("TCL: request error message: ", onError.graphQLErrors[0].message),
+  request: async operation => {
     if (!localStorage.getItem('token_vuesco')) {
       localStorage.setItem('token_vuesco', '');
     }
+    await localStorage.getItem('token_vuesco')
+    console.log("TCL: localStorage.getItem('token_vuesco')", localStorage.getItem('token_vuesco'))
     operation.setContext({
       headers: {
-        authorization: localStorage.getItem('token_vuesco')
+        authorization: await localStorage.getItem('token_vuesco')
       }
     });
   },
@@ -41,6 +43,8 @@ Vue.use(VueApollo);
 Vue.use(VueToastify);
 Vue.use(Plugin);
 
+import { mapGetters } from 'vuex'
+
 new Vue({
   apolloProvider,
   router,
@@ -48,5 +52,5 @@ new Vue({
   render: h => h(App),
   created() {
     store.dispatch('getCurrentUser');
-  }
+  },
 }).$mount('#app')

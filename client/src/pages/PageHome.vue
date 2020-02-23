@@ -1,28 +1,46 @@
 <template>
   <div class="card__container">
-    <TheCard v-for="(post, index) in posts" :dataPost="post" :key="index" />
+    <TheLoading :isLoading="loadingPosts" :isFullScreen="true" />
+    <fragment v-if="posts.length > 0">
+      <TheCard v-for="(post, index) in posts" :dataPost="post" :key="index" />
+    </fragment>
+    <div class="has-text-centered" v-if="posts.length === 0 && !loadingPosts">
+      <h2>No Post data</h2>
+    </div>
   </div>
 </template>
 
 <script>
 import TheCard from "../components/TheCard";
-
-const dummy = {
-  url:
-    "https://funlava.com/wp-content/uploads/2013/03/animals_cats_small_cat_005241_.jpg",
-  caption:
-    "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
-};
-
-const data = Array.apply(dummy, Array(10)).map(_ => ({ ...dummy }));
+import TheLoading from "../components/TheLoading";
 
 export default {
+  components: { TheCard, TheLoading },
+  created() {
+    this.getPosts();
+  },
   data() {
     return {
-      posts: data
+      posts: [],
+      loadingPosts: false
     };
   },
-  components: { TheCard }
+  methods: {
+    getPosts() {
+      this.loadingPosts = true;
+      this.$store
+        .dispatch("getPosts")
+        .then(res => {
+          this.loadingPosts = false;
+          this.posts = res;
+        })
+        .catch(err => {
+          this.loadingPosts = false;
+          this.posts = [];
+          this.$vToastify.error(`Failed: ${err}`);
+        });
+    }
+  }
 };
 </script>
 
@@ -32,6 +50,6 @@ export default {
   // grid-template-columns: 2fr 2fr;
   grid-template-rows: auto;
   grid-gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr))
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
 }
 </style>

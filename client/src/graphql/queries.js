@@ -19,3 +19,44 @@ export const GET_CURRENT_USER = gql`
     }
   }
 `
+
+
+export const GET_POSTS = gql`
+  query{
+    getPosts{
+      caption
+      imageUrl
+      createdBy{
+        avatar
+        username
+        email
+      }
+      createdDate
+      likes
+      comments{
+        commentBody
+        commentDate
+      }
+    }
+  }
+`
+
+export const GET_MY_POSTS = gql`
+  query($user_id: String!){
+    getMyPosts(user_id: $user_id){
+      caption
+      imageUrl
+      createdBy{
+        avatar
+        username
+        email
+      }
+      createdDate
+      likes
+      comments{
+        commentBody
+        commentDate
+      }
+    }
+  }
+`

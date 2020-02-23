@@ -17,9 +17,7 @@
               <i class="fas fa-user"></i>
             </span>
           </div>
-          <p class="help is-danger" v-if="formErrors['username']">
-            {{ this.formErrors["username"] }}
-          </p>
+          <p class="help is-danger" v-if="formErrors['username']">{{ this.formErrors["username"] }}</p>
         </div>
 
         <div class="field">
@@ -37,18 +35,14 @@
               <i class="fas fa-key"></i>
             </span>
           </div>
-          <p class="help is-danger" v-if="formErrors['password']">
-            {{ this.formErrors["password"] }}
-          </p>
+          <p class="help is-danger" v-if="formErrors['password']">{{ this.formErrors["password"] }}</p>
         </div>
         <div class="has-text-centered">
           <button
-            :disabled="!isFormValid"
+            :disabled="!isFormValid ||loadingForm"
             type="submit"
-            class="button is-primary"
-          >
-            Sign in
-          </button>
+            :class="`button is-primary ${loadingForm ? 'is-loading' : ''}`"
+          >Sign in</button>
         </div>
       </form>
     </div>
@@ -56,16 +50,34 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
       form: {},
-      formErrors: {}
+      formErrors: {},
+      loadingForm: false
     };
   },
   methods: {
     submitForm(e) {
       e.preventDefault();
+      this.loadingForm = true;
+      this.$store
+        .dispatch("signinUser", this.form)
+        .then(res => {
+          this.loadingForm = false;
+          this.$vToastify.success("Success signed in user");
+          setTimeout(()=>{
+            console.log("store", this.currentUser);
+          },3000)
+        })
+        .catch(err => {
+          const errMsg = err.replace("GraphQL error: ", "");
+          this.loadingForm = false;
+          this.$vToastify.error(`Failed: ${errMsg}`);
+        });
     },
     onChangeHandler(e) {
       const { name, value } = e.target;
@@ -83,7 +95,14 @@ export default {
           delete this.formErrors[name];
         }
       }
-    },
+    }
+  },
+  watch: {
+    currentUser(value) {
+      if (value) {
+        this.$router.push("/");
+      }
+    }
   },
   computed: {
     isFormValid() {
@@ -93,7 +112,8 @@ export default {
         !this.formErrors["username"] &&
         !this.formErrors["password"]
       );
-    }
+    },
+    ...mapGetters(["currentUser"])
   }
 };
 </script>

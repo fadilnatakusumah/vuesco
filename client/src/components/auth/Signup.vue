@@ -86,11 +86,12 @@ export default {
         .dispatch("signupUser", this.form)
         .then(res => {
           this.loadingForm = false;
-          this.$vToastify.success("Success signup user");
+          this.$vToastify.success("Success signed up user");
         })
         .catch(err => {
+          const errMsg = err.replace("GraphQL error: ", "");
           this.loadingForm = false;
-          this.$vToastify.error("Failed to signup user");
+          this.$vToastify.error(`Failed: ${errMsg}`);
         });
     },
     onChangeHandler(e) {

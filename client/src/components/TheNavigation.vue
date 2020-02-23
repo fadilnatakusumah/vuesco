@@ -8,15 +8,15 @@
         </b-navbar-item>
       </template>
       <template slot="start">
-        <fragment v-if="!currentUser">
+        <fragment v-if="currentUser">
           <b-navbar-item href="#" tag="router-link" :to="{ path: '/profile' }">
             <i class="fa fa-user" />
             <span class="icon__title">Profile</span>
           </b-navbar-item>
-          <b-navbar-item href="#" tag="router-link" :to="{ path: '/posts' }">
+          <!-- <b-navbar-item href="#" tag="router-link" :to="{ path: '/posts' }">
             <i class="fa fa-images" />
             <span class="icon__title">My Posts</span>
-          </b-navbar-item>
+          </b-navbar-item> -->
         </fragment>
         <!-- <b-navbar-dropdown label="Info">
         <b-navbar-item href="#">
@@ -57,8 +57,8 @@ export default {
   },
   methods: {
     signoutUser() {
-      this.$store.commit("signoutUser");
-      this.$vToastify.info("User signout");
+      this.$store.dispatch("signoutUser");
+      this.$vToastify.info("User signed out");
       this.$router.push("/");
     }
   },
