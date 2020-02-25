@@ -24,6 +24,7 @@ export const GET_CURRENT_USER = gql`
 export const GET_POSTS = gql`
   query{
     getPosts{
+      _id
       caption
       imageUrl
       createdBy{
@@ -44,6 +45,7 @@ export const GET_POSTS = gql`
 export const GET_MY_POSTS = gql`
   query($user_id: String!){
     getMyPosts(user_id: $user_id){
+      _id
       caption
       imageUrl
       createdBy{

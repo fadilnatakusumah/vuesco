@@ -30,3 +30,19 @@ export const CREATE_POST = gql`
     }
   }
 `
+
+
+export const DELETE_POST = gql`
+  mutation($id_post: ID){
+    deletePost(id_post: $id_post){
+      _id
+      imageUrl
+      createdDate
+      createdBy{
+        avatar
+        username
+        email
+      }
+    }
+  }
+`

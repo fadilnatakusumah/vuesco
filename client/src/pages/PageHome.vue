@@ -2,7 +2,11 @@
   <div class="card__container">
     <TheLoading :isLoading="loadingPosts" :isFullScreen="true" />
     <fragment v-if="posts.length > 0">
-      <TheCard v-for="(post, index) in posts" :dataPost="post" :key="index" />
+      <TheCard 
+      v-for="(post, index) in posts" 
+      :dataPost="post" 
+      :key="index"
+       />
     </fragment>
     <div class="has-text-centered" v-if="posts.length === 0 && !loadingPosts">
       <h2>No Post data</h2>

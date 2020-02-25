@@ -122,5 +122,29 @@ export default {
     }
 
     return getPost
+  },
+
+  deletePost: async ({ id_post }, { Post }) => {
+    const findPost = await Post.findOne({ _id: id_post }).populate({
+      path: 'createdBy',
+      model: 'User'
+    });
+    const tempPost = { ...findPost }
+    findPost.delete();
+    // const post = await Post.deleteOne({_id: id_post});
+
+    // const getPost = await Post.findOne({
+    //   _id: post._id
+    // })
+    //   .populate({
+    //     path: 'createdBy',
+    //     model: 'User'
+    //   })
+
+    if (!tempPost) {
+      throw new Error("Failed to delete Post")
+    }
+
+    return tempPost
   }
 }

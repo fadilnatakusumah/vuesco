@@ -22,7 +22,12 @@
       <div class="card__container">
         <TheLoading :isLoading="loadingMyPosts" />
         <fragment v-if="myPosts.length > 0">
-          <TheCard v-for="(post, index) in myPosts" :dataPost="post" :key="index" />
+          <TheCard
+            v-for="(post, index) in myPosts"
+            :dataPost="post"
+            :key="index"
+            @getMyPost="getMyPost"
+          />
         </fragment>
         <div class="has-text-centered" v-if="myPosts.length === 0 && !loadingMyPosts">
           <h2>No Post data</h2>
@@ -80,6 +85,7 @@ export default {
   },
   methods: {
     getMyPost() {
+      alert("getMyPost")
       this.loadingMyPosts = true;
       this.$store
         .dispatch("getMyPosts")
@@ -98,14 +104,16 @@ export default {
       this.$store
         .dispatch("createPost", this.form)
         .then(res => {
-          console.log("TCL: createPost -> res", res);
           this.myPosts = [res, ...this.myPosts];
           this.$vToastify.success("Success create post");
           this.toggleModal();
         })
         .catch(err => this.$vToastify.error(`Failed: ${err}`));
     },
-    toggleModal() {
+    toggleModal(e) {
+      if(e){
+        e.preventDefault();
+      }
       this.showModal = !this.showModal;
     }
   },

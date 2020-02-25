@@ -23,7 +23,7 @@ export default new Vuex.Store({
         query: Queries.GET_CURRENT_USER
       })
         .then(({ data }) => {
-          console.log("TCL: data", data)
+          // console.log("TCL: data", data)
           commit('updateState', ['currentUser', data.getCurrentUser])
         })
         .catch(err => console.dir("TCL: err", err.message))
@@ -52,7 +52,7 @@ export default new Vuex.Store({
         })
           .then(async ({ data }) => {
             await localStorage.setItem('token_vuesco', data.signinUser.token);
-            console.log("localStorage", localStorage.getItem('token_vuesco'));
+            // console.log("localStorage", localStorage.getItem('token_vuesco'));
             await dispatch('getCurrentUser');
             resolve()
           })
@@ -95,6 +95,19 @@ export default new Vuex.Store({
           }
         })
           .then(({ data }) => res(data.createPost))
+          .catch(err => rej(err.message))
+      })
+    },
+    deletePost: async (_, variables) => {
+      console.log("TCL:  variables", variables)
+      return new Promise((res, rej) => {
+        ApolloClient.mutate({
+          mutation: Mutations.DELETE_POST,
+          variables: {
+            ...variables,
+          }
+        })
+          .then(({ data }) => res(data.deletePost))
           .catch(err => rej(err.message))
       })
     }

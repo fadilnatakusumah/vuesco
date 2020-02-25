@@ -19,13 +19,13 @@ export const defaultClient = new ApolloClient({
   fetchOptions: {
     credentials: "include"
   },
-  onError: (onError) => console.log("TCL: request error message: ", onError.graphQLErrors[0].message),
+  onError: (onError) => console.log("TCL: request error message: ", onError),
   request: async operation => {
     if (!localStorage.getItem('token_vuesco')) {
       localStorage.setItem('token_vuesco', '');
     }
-    await localStorage.getItem('token_vuesco')
-    console.log("TCL: localStorage.getItem('token_vuesco')", localStorage.getItem('token_vuesco'))
+    // await localStorage.getItem('token_vuesco')
+    // console.log("TCL: localStorage.getItem('token_vuesco')", localStorage.getItem('token_vuesco'))
     operation.setContext({
       headers: {
         authorization: await localStorage.getItem('token_vuesco')

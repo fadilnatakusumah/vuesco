@@ -17,8 +17,10 @@
           <p class="title is-4">{{dataPost.createdBy.username}}</p>
           <p class="subtitle is-6">{{dataPost.createdBy.email}}</p>
         </div>
+        <div class="media-right">
+          <button @click="deletePostHandler(dataPost._id)" class="delete"></button>
+        </div>
       </div>
-
       <div class="content">
         {{dataPost.caption}}
         <br />
@@ -32,23 +34,49 @@
 
 <script>
 import moment from "moment";
+import { mapGetters } from "vuex";
 
 export default {
   name: "UiCard",
+  created() {
+  },
   data() {
     return {};
+  },
+  computed: {
+    ...mapGetters(["currentUser"])
   },
   methods: {
     moment(date) {
       const convertedDate = new Date(+date);
       return moment(convertedDate);
+    },
+    refreshPosts(){
+      alert("refreshPosts")
+      this.$emit('getMyPost')
+    },
+    deletePostHandler(id_post) {
+      if (confirm("Are you sure?")) {
+        this.$store
+          .dispatch("deletePost", { id_post })
+          .then((res) => {
+            this.refreshPosts();
+            this.$vToastify.success("Success delete post");
+          })
+          .catch(err => {
+            this.$vToastify.success("Failed delete post");
+          });
+      }
     }
   },
   props: {
     dataPost: {
       default: {},
       type: Object
-    }
+    },
+    getMyPost: {
+      type: Function
+    },
   }
 };
 </script>

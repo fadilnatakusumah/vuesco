@@ -10,6 +10,7 @@ type Mutation {
 	signinUser(username: String!, password: String!): Token
 
 	createPost(caption: String!, imageUrl: String!, createdBy: ID!): Post
+	deletePost(id_post: ID): Post
 }
 
 type Token {
